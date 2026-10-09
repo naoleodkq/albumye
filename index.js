@@ -11,13 +11,20 @@ app.use(express.json());
 // lista guardada na memória do servidor
 let lista = ['Item 1', 'Item 2', 'Item 3'];
 
-// get: devolve a lista
-app.get('/api/lista', (req, res) => res.json({ lista }));
-
 // post: adiciona um item na lista
 app.post('/api/lista', (req, res) => {
-    if (req.body.item) lista.push(req.body.item);
+    lista.push(req.body);
     res.json({ status: 'sucesso', lista });
+
+    //arquivo professora dentro do post
+    const novaObra = req.body;
+    lista.push(novaObra);
+    res.json({ status: 'sucesso', lista});
+});
+
+// get: devolve a lista (prof pediu tb)
+app.get('/api/lista', (req, res) => {
+    res.json(lista);
 });
 
 app.listen(3000, () => console.log('Olá!!!'));

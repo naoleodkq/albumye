@@ -27,14 +27,18 @@ function criarCard(album) {
 // mostra os cards já salvos
 galeria.forEach((album) => colecao.insertAdjacentHTML('beforeend', criarCard(album)));
 
-// salva e mostra o card novo
+// envia o álbum novo para o servidor e volta ao index
 formulario.addEventListener('submit', (evento) => {
     evento.preventDefault();
 
-    const novo = new ObraDeArte(...campos.map((id) => document.getElementById(id).value));
-    galeria.push(novo);
-    localStorage.setItem('galeria', JSON.stringify(galeria));
+    const novaObra = new ObraDeArte(...campos.map((id) => document.getElementById(id).value));
 
-    colecao.insertAdjacentHTML('beforeend', criarCard(novo));
-    formulario.reset();
+    fetch('/api/lista', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(novaObra)
+    })
+        .then(() => {
+            window.location.href = 'index.html';
+        });
 });
